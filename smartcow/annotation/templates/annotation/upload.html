@@ -1,0 +1,69 @@
+{% extends '../annotation/base.html' %}
+{% load static %}
+{% block title %}SmartCow Task | Images Upload{% endblock %}
+{% block bodyclass %}{% endblock %}
+{% block bodycontainer %}{% endblock %}
+{% block bodycard %}{% endblock %}
+{% block content %}
+{% include "annotation/navbar.html" %}
+
+<div id="wrapper">
+    <div id="content-wrapper">
+      <div class="container-fluid">
+        <h4>Images</h4>
+        <hr>
+
+          {# 1. BUTTON TO TRIGGER THE ACTION #}
+<button type="button" class="btn btn-primary js-upload-photos">
+  <span class="glyphicon glyphicon-cloud-upload"></span> Click here to browse and upload images
+</button> * (Please refresh if not appeared after upload) &nbsp;&nbsp; *(Please click any image to annotate)
+<hr>
+          {# 2. FILE INPUT TO BE USED BY THE PLUG-IN #}
+<input id="fileupload" type="file" name="file" multiple
+       style="display: none;"
+       data-url="{% url 'upload' %}"
+       data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' accept="image/*">
+
+          {# 3. TABLE TO DISPLAY THE UPLOADED PHOTOS #}
+
+
+        <div class="row">
+             {% for photo in photos %}
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="">
+              <div class="">
+                <a href="/annotate/{{ photo.id }}"><img src="{{ photo.file.url }}" alt="{{ photo.file.name }}" height="200" width="300"></a>
+              </div>
+            </div>
+          </div>
+             {% endfor %}
+        </div>
+
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Uploading...</h4>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ {% endblock %}
+
+{% block javascript %}
+  {# JQUERY FILE UPLOAD SCRIPTS #}
+  <script src="{% static 'js/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
+  <script src="{% static 'js/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
+  <script src="{% static 'js/jquery-file-upload/jquery.fileupload.js' %}"></script>
+
+  {# PHOTOS PAGE SCRIPTS #}
+  <script src="{% static 'js/custom/upload.js' %}"></script>
+{% endblock %}

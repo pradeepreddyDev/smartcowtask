@@ -1,0 +1,26 @@
+{% extends '../annotation/base.html' %}
+{% load custom_tag %}
+{% block title %}SmartCow Task | Login{% endblock %}
+{% block content %}
+ <div class="card-header">SmartCow Task Login</div>
+      <div class="card-body">
+        <form method="post"  class="form-group">
+          {% csrf_token %}
+          {% if form.errors %}
+            <p style="color:#ff5a57; font-size:12px">Invalid credentials</p>
+          {% endif %}
+           {% for field in form %}
+            <div class="form-group">
+            <div class="form-label-group">
+              {{ field | addclass:"form-control" }}
+              <label>{{ field.label_tag }}</label>
+            </div>
+           </div>
+          {% endfor %}
+          <button class="btn btn-primary btn-block" type="submit">Login</button>
+        </form>
+        <div class="text-center">
+          <a class="d-block small mt-3" href="/">Signup</a>
+        </div>
+ </div>
+{% endblock %}

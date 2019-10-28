@@ -1,0 +1,44 @@
+{% extends '../annotation/base.html' %}
+{% load static %}
+{% block title %}SmartCow Task | Images Upload{% endblock %}
+{% block bodyclass %}{% endblock %}
+{% block bodycontainer %}{% endblock %}
+{% block bodycard %}{% endblock %}
+{% block content %}
+{% include "annotation/navbar.html" %}
+
+<div id="wrapper">
+    <div id="content-wrapper">
+      <div class="container-fluid">
+           <h4>Check Annotated or Download CSV</h4>
+        <hr>
+        <html>
+	<head>
+		<title>Check Annotations</title>
+		<style type="text/css" media="all">@import "{% static 'js/custom/dist/css/annotation.css' %}";</style>
+		<script type="text/javascript" src="{% static 'js/custom/dist/js/jquery.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/custom/dist/js/jquery-ui.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/custom/jquery.annotate.js' %}"></script>
+		<script language="javascript">
+			$(window).load(function() {
+				$("#toAnnotate").annotateImage({
+					editable: false,
+					useAjax: false,
+					notes: {% autoescape off %}{{ annotate.coordinates }}{% endautoescape %}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div>
+			<img id="toAnnotate" src="{{ photo.file.url }}" />
+		</div>
+	</body>
+        <a href="/downloadcsv/{{ annotate.id }}" class="btn btn-primary btn-md"> Download CSV</a>
+      </div>
+    </div>
+  </div>
+ {% endblock %}
+
+{% block javascript %}{% endblock %}
+{% block conflictscript %}{% endblock %}

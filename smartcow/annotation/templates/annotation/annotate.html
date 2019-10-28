@@ -1,0 +1,57 @@
+{% extends '../annotation/base.html' %}
+{% load static %}
+{% block title %}SmartCow Task | Images Upload{% endblock %}
+{% block bodyclass %}{% endblock %}
+{% block bodycontainer %}{% endblock %}
+{% block bodycard %}{% endblock %}
+{% block content %}
+{% include "annotation/navbar.html" %}
+
+<div id="wrapper">
+    <div id="content-wrapper">
+      <div class="container-fluid">
+        <hr>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script>
+        <script src="{% static 'js/custom/bbox_annotator.js' %}"></script>
+        <h4>Annotate <input id="reset_button" type="reset" />
+        <form method="post" action="/confirm/{{ photo.id }}" >
+            {% csrf_token %}
+        </h4>
+        <div id="bbox_annotator" ></div>
+        <div style="display:inline-block;vertical-align:top;">
+          <div>
+            <textarea id="annotation_data" name="annotation" hidden></textarea>
+          </div>
+        </div>
+         <h4><button type="submit" class="btn btn-primary btn-md" name="confirm"> Confirm </button></h4>
+        </form>
+      </div>
+    </div>
+  </div>
+ {% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+function getParameterByName(name) {
+  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+$(document).ready(function() {
+
+  var annotator = new BBoxAnnotator({
+    url: "{{ photo.file.url }}",
+    input_method: "select",
+    labels: ["car", "bus", "autorickshaw", "bike"],
+    onchange: function(entries) {
+      $("#annotation_data").text(JSON.stringify(entries));
+    }
+  });
+  // Initialize the reset button.
+  $("#reset_button").click(function(e) {
+    annotator.clear_all();
+  })
+});
+</script>
+{% endblock %}
